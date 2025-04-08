@@ -1,0 +1,14 @@
+--- backdoor.xcodeproj/project.pbxproj
++++ backdoor.xcodeproj/project.pbxproj
+@@ -80,6 +80,11 @@
+ 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+ 			membershipExceptions = (
+ 				Info.plist,
++				SettingsHeaderTableViewCell.swift,
++				AILearningSettingsViewController.swift,
++				ImprovedLearningSettingsCell.swift,
++				ImprovedLearningViewController.swift,
++				ModelServerIntegrationViewController.swift,
+ 			);
+ 			target = 33BA378A2BF8159F00FF530A /* backdoor */;
+ 		};
