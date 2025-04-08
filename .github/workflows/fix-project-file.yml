@@ -1,0 +1,39 @@
+name: Fix Project File Before Build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  fix-project-file:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Fix project file
+      run: |
+        chmod +x scripts/ci/fix-project.sh
+        ./scripts/ci/fix-project.sh
+    
+    - name: Check if changes were made
+      id: check_changes
+      run: |
+        if [[ -n "$(git status --porcelain)" ]]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Commit and push if changes
+      if: steps.check_changes.outputs.changes == 'true'
+      run: |
+        git config --global user.name 'GitHub Actions Bot'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add backdoor.xcodeproj/project.pbxproj
+        git commit -m "Fix project file to avoid multiple commands produce errors"
+        git push origin main
